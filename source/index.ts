@@ -1,30 +1,20 @@
-import { ITimerParams } from "./lib/interfaces/i-timer-params";
 import { Timer } from "./lib/timer";
-
 import { VALID_TIMER_CONFIG } from './default-config';
 
 
-export default class TimerBuilder {
+export default class TimerFactory {
 
     private static timer: Timer  ;
-    
-    // private static timerParams: ITimerParams ;
 
     public static getTimerInstance(): Timer {
-
         if (! this.timer){
             this.timer = new Timer();
         }
         return this.timer;
     }
-    /* public static  constructTimer( 
-         timerParams: ITimerParams
-    ){
-        this.timerParams = timerParams;
-    } */
 }
 
-const timer = TimerBuilder.getTimerInstance();
+const timer = TimerFactory.getTimerInstance();
 // console.time("set config");
 
 timer.setConfig(VALID_TIMER_CONFIG);

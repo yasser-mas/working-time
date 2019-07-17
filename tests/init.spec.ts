@@ -1,5 +1,5 @@
 import { expect, should, assert } from 'chai';
-import TimerBuilder from '../source/index';
+import TimerFactory from '../source/index';
 import { Timer } from '../source/lib/timer';
 import { VALID_TIMER_CONFIG } from './testing-data';
 import TimerError from '../source/lib/timer-error';
@@ -17,31 +17,31 @@ describe('Initiate Timer Builder', function() {
 
   
   before(function() {
-    timer = TimerBuilder.getTimerInstance();
+    timer = TimerFactory.getTimerInstance();
   }); */
 
   it('should initiate timer builder', function() {
-    let timer = TimerBuilder.getTimerInstance();
+    let timer = TimerFactory.getTimerInstance();
 
     expect(timer).not.null;
   });
 
   it('new timer should be same instance', function() {
-    let timer = TimerBuilder.getTimerInstance();
-    let timer2 = TimerBuilder.getTimerInstance();
+    let timer = TimerFactory.getTimerInstance();
+    let timer2 = TimerFactory.getTimerInstance();
     expect(timer).to.be.equal(timer2);
   });
 
   it('all instances should have same configuration', function() {
-    let timer = TimerBuilder.getTimerInstance();
+    let timer = TimerFactory.getTimerInstance();
     timer.setConfig(VALID_TIMER_CONFIG);
-    let timer2 = TimerBuilder.getTimerInstance();
+    let timer2 = TimerFactory.getTimerInstance();
     expect(timer.getBufferedCalender).equal(timer2.getBufferedCalender);
   });
 
 
   it('should initiate timer with empty vacations', function() {
-    let timer = TimerBuilder.getTimerInstance();
+    let timer = TimerFactory.getTimerInstance();
     let invalidConfig = getCopy(VALID_TIMER_CONFIG);
     invalidConfig.vacations = [];
     expect(timer.setConfig(invalidConfig)).to.not.be.null;
@@ -49,7 +49,7 @@ describe('Initiate Timer Builder', function() {
   });
 
   it('should throw exception on create timer with invalid vacation ', function() {
-    let timer = TimerBuilder.getTimerInstance();
+    let timer = TimerFactory.getTimerInstance();
     let invalidConfig = getCopy(VALID_TIMER_CONFIG);
     invalidConfig.vacations = [ "asd" ];
     expect(()=> timer.setConfig(invalidConfig)).to.throw('Invalid Vacation Date !');
@@ -57,7 +57,7 @@ describe('Initiate Timer Builder', function() {
 
 
   it('should throw exception on initiate timer with invalid working days', function() {
-    let timer = TimerBuilder.getTimerInstance();
+    let timer = TimerFactory.getTimerInstance();
     let invalidConfig = getCopy(VALID_TIMER_CONFIG);
     invalidConfig.normalWorkingHours[0] = [
       {
@@ -70,7 +70,7 @@ describe('Initiate Timer Builder', function() {
 
 
   it('should throw exception on initiate timer with empty working days', function() {
-    let timer = TimerBuilder.getTimerInstance();
+    let timer = TimerFactory.getTimerInstance();
     let invalidConfig = getCopy(VALID_TIMER_CONFIG);
     invalidConfig.normalWorkingHours = {};
     // console.log(timer.setConfig(invalidConfig));

@@ -240,47 +240,10 @@ export class Timer  {
     
             });
     
-            
-            // break;
         }
         
         
         return nextWindow;
-/* 
-        const bufferedDate = this.getDayInfo(nextWindow);
-        const requestedTime = nextWindow.getTime();
-        const day = this.getFormatedDate(nextWindow);
-        let remainig = count * TimerUnit[unit];
-        const exactDate: null | Date  = null ;
-         */
-       /*  function subtractTimer(){
-
-            bufferedDate.workingHours.forEach((window , index) => {
-                const startTime = new Date(`${day} ${window.from}`).getTime();
-                const endTime = new Date(`${day} ${window.to}`).getTime();
-    
-                    if( 
-                        requestedTime >= startTime && 
-                        requestedTime < endTime 
-                        ){
-                        
-                        if ( (requestedTime + remainig) < requestedTime ) {
-                            remainig = 0 ;
-
-                        }else {
-
-                        }
-                    }else if (
-                        startTime > requestedTime
-                    ) {
-                        nextWindow =  new Date(startTime) ;
-                    }
-    
-            });
-
-        }
-        subtractTimer(); */
-        // return inWindow;
     }
 
 }
