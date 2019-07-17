@@ -1,0 +1,10 @@
+# Ignore Output folder 
+build/
+
+# Ignore Node Modules 
+
+node_modules
+
+# Ignore Environment File 
+.env
+

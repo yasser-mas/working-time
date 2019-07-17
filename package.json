@@ -1,0 +1,32 @@
+{
+  "name": "working-time",
+  "version": "1.0.0",
+  "description": "working time calculator",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "tsc && node build/index.js",
+    "watch": "tsc --watch && nodemon build/index.js",
+    "test": "mocha -r ts-node/register tests/**/*.spec.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yasser-mas/working-time.git"
+  },
+  "author": "Yasser Abu Omira <yasser.mas2@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yasser-mas/working-time/issues"
+  },
+  "homepage": "https://github.com/yasser-mas/working-time#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.0.10",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  }
+}
