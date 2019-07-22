@@ -4,7 +4,6 @@ import { TimerValidator } from "./timer-validator";
 import { TimerUnit } from "./timer-unit";
 import { BusinessDay } from "./interfaces/i-business-day";
 import TimerError from "./timer-error";
-import { throws } from "assert";
 
 
 export class Timer  {
@@ -22,10 +21,28 @@ export class Timer  {
     }
     setConfig(
         timerParams: ITimerParams
-    ) : Timer |  TimerError {  
+    ) : Promise<Timer> {  
         this.timerParams = timerParams ;
 
-        try {
+        return new Promise((resolve, reject) => {
+            
+            try {
+                this.timerValidator.validateVacations( timerParams.vacations );
+                this.timerValidator.validateNormalWorkingDays( timerParams.normalWorkingHours );
+                this.timerValidator.validateExceptionalWorkingDays( timerParams.exceptionalWorkingHours );
+                this.timerValidator.validateMinBuffer( timerParams.minBufferedDays );
+                this.timerValidator.validateMaxBuffer( timerParams.maxBufferedDays );
+                this.constructWorkingDays(timerParams);
+                // return this;
+                resolve(this);
+        
+            } catch (error) {
+                reject(new TimerError(error.message)) ;
+            }
+
+        });
+        
+      /*   try {
             this.timerValidator.validateVacations( timerParams.vacations );
             this.timerValidator.validateNormalWorkingDays( timerParams.normalWorkingHours );
             this.timerValidator.validateExceptionalWorkingDays( timerParams.exceptionalWorkingHours );
@@ -36,7 +53,7 @@ export class Timer  {
     
         } catch (error) {
             throw new TimerError(error.message);
-        }
+        } */
     }
 
     private getMonth(date: Date){

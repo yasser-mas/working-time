@@ -52,7 +52,10 @@ describe('Initiate Timer Builder', function() {
     let timer = TimerFactory.getTimerInstance();
     let invalidConfig = getCopy(VALID_TIMER_CONFIG);
     invalidConfig.vacations = [ "asd" ];
-    expect(()=> timer.setConfig(invalidConfig)).to.throw('Invalid Vacation Date !');
+    // expect(()=> timer.setConfig(invalidConfig)).to.throw('Invalid Vacation Date !');
+    return timer.setConfig(invalidConfig).catch(e=>{
+      expect(e.message).to.be.eq('Invalid Vacation Date !');
+    });
   });
 
 
@@ -65,7 +68,10 @@ describe('Initiate Timer Builder', function() {
         to: '14:00'
       }
     ];
-    expect(()=> timer.setConfig(invalidConfig)).to.throw('Invalid Working Hours => Time should be hh:mm !');
+    // expect(()=> timer.setConfig(invalidConfig)).to.throw('Invalid Working Hours => Time should be hh:mm !');
+    return timer.setConfig(invalidConfig).catch(e=>{
+      expect(e.message).to.be.eq('Invalid Working Hours => Time should be hh:mm !');
+    });
   });
 
 
@@ -74,7 +80,9 @@ describe('Initiate Timer Builder', function() {
     let invalidConfig = getCopy(VALID_TIMER_CONFIG);
     invalidConfig.normalWorkingHours = {};
     // console.log(timer.setConfig(invalidConfig));
-    expect(()=> timer.setConfig(invalidConfig)).to.throw('You should provide at least one working day !');
-
+    // expect(()=> timer.setConfig(invalidConfig)).to.throw('You should provide at least one working day !');
+    return timer.setConfig(invalidConfig).catch(e=>{
+      expect(e.message).to.be.eq('You should provide at least one working day !');
+    });
   });
 });
