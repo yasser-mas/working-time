@@ -1,4 +1,3 @@
-import { IWorkingHours, IExceptionalWindow } from "./interfaces/i-working-hours";
 import { ITimerParams } from "./interfaces/i-timer-params";
 import { TimerValidator } from "./timer-validator";
 import { TimerUnit } from "./timer-unit";
@@ -8,23 +7,19 @@ import TimerError from "./timer-error";
 
 export class Timer  {
     
-    private bufferedCalender : Map <string,BusinessDay> = new Map();
+    private bufferedCalendar : Map <string,BusinessDay> = new Map();
     private timerValidator = new TimerValidator();
-    private vacations: string[] ;
-    private normalWorkingHours:  IWorkingHours;
-    private exceptionalWorkingHours: IExceptionalWindow;
-    private minBufferedDays: number;
-    private maxBufferedDays: number;
     private timerParams: ITimerParams ;
 
     constructor(){
     }
-    setConfig(
+    
+    public setConfig(
         timerParams: ITimerParams
-    ) : Promise<Timer> {  
+    ) : Timer {  
         this.timerParams = timerParams ;
 
-        return new Promise((resolve, reject) => {
+        /* return new Promise((resolve, reject) => {
             
             try {
                 this.timerValidator.validateVacations( timerParams.vacations );
@@ -33,16 +28,15 @@ export class Timer  {
                 this.timerValidator.validateMinBuffer( timerParams.minBufferedDays );
                 this.timerValidator.validateMaxBuffer( timerParams.maxBufferedDays );
                 this.constructWorkingDays(timerParams);
-                // return this;
                 resolve(this);
         
             } catch (error) {
                 reject(new TimerError(error.message)) ;
             }
 
-        });
+        }); */
         
-      /*   try {
+        try {
             this.timerValidator.validateVacations( timerParams.vacations );
             this.timerValidator.validateNormalWorkingDays( timerParams.normalWorkingHours );
             this.timerValidator.validateExceptionalWorkingDays( timerParams.exceptionalWorkingHours );
@@ -53,13 +47,20 @@ export class Timer  {
     
         } catch (error) {
             throw new TimerError(error.message);
-        } */
+        }
+    }
+
+    public async setConfigAsync(
+        timerParams: ITimerParams
+    ): Promise<Timer>{
+        return this.setConfig(timerParams)
     }
 
     private getMonth(date: Date){
         const MONTH = date.getMonth() + 1  ;
         return (MONTH < 10)? "0" + MONTH: MONTH ;
     }
+
     private getDay(date: Date){
         return (date.getDate() < 10)? "0" + date.getDate(): date.getDate() ;;
     }
@@ -69,10 +70,9 @@ export class Timer  {
         const MONTH = this.getMonth(date) ;
         const DAY = this.getDay(date);
         return `${YEAR}-${MONTH}-${DAY}` ;
-}
+    }
 
     private constructWorkingDays(timerParams: ITimerParams){
-
         let today = new Date().setHours(0,0,0,0);
         let startDate = today - ( TimerUnit.DAYS * Math.abs(timerParams.minBufferedDays));
         let endDate = today + ( TimerUnit.DAYS * Math.abs(timerParams.maxBufferedDays));
@@ -101,8 +101,9 @@ export class Timer  {
                 BUSINESSDAY.workingHours = [];
 
             }
-            this.bufferedCalender.set(FULLDAY, BUSINESSDAY );
+            this.bufferedCalendar.set(FULLDAY, BUSINESSDAY );
         }
+
     }
     
 
@@ -111,14 +112,17 @@ export class Timer  {
         return Math.ceil( ( from.getTime() - to.getTime() ) / TimerUnit.DAYS );
     }
 
-    public get getBufferedCalender():Map <string,BusinessDay>  {
-        return this.bufferedCalender ;
+    public get getBufferedCalendar():Map <string,BusinessDay>  {
+        return this.bufferedCalendar ;
     }
 
 
-    public getDayInfo( date: Date ): BusinessDay{
+    public getDayInfo( date: Date ): BusinessDay {
+        if ( !(date instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
         let formatedDate = this.getFormatedDate(date);
-        let bufferedDate = <BusinessDay> this.getBufferedCalender.get(formatedDate);
+        let bufferedDate = <BusinessDay> this.getBufferedCalendar.get(formatedDate);
         if (!bufferedDate){
             const daysBetween = this.getDaysBetween(date , new Date()) ; 
 
@@ -129,12 +133,16 @@ export class Timer  {
 
             }
             this.constructWorkingDays(this.timerParams);
-            bufferedDate = <BusinessDay> this.getBufferedCalender.get(formatedDate);
+            bufferedDate = <BusinessDay> this.getBufferedCalendar.get(formatedDate);
         }
         return bufferedDate;
     }
 
-
+    public async getDayInfoAsync(
+        date: Date 
+    ): Promise<BusinessDay>{
+        return this.getDayInfo(date);
+    }
 
     public isWorkingTime( date: Date ): boolean{
         const bufferedDate = this.getDayInfo(date);
@@ -258,7 +266,6 @@ export class Timer  {
             });
     
         }
-        
         
         return nextWindow;
     }

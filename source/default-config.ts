@@ -1,7 +1,7 @@
 export const VALID_TIMER_CONFIG = {
     vacations: ['2019-07-31'],
     normalWorkingHours: {
-      "0": [
+      0: [
         
        {
           from: '16:15',
@@ -51,6 +51,6 @@ export const VALID_TIMER_CONFIG = {
         }
       ]
     },
-    minBufferedDays: 6,
-    maxBufferedDays: 8
+    minBufferedDays: 1,
+    maxBufferedDays: 1
   }

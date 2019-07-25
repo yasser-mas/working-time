@@ -4,9 +4,8 @@
   "description": "working time calculator",
   "main": "index.js",
   "scripts": {
-    "start": "node build/index.js",
-    "build": "tsc && node build/index.js",
-    "watch": "tsc --watch && nodemon build/index.js",
+    "start": "tsc  && node build/index.js",
+    "build": "tsc -d && node build/index.js",
     "test": "mocha -r ts-node/register tests/**/*.spec.ts"
   },
   "repository": {
