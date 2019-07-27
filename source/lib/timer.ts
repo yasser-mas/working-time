@@ -235,8 +235,12 @@ export class Timer  {
     ): Promise<Date>{
         return this.getNextWorkingTime(date);
     }
-    
-    public add( date: Date , count: number , unit: 'MINUTES'|'HOURS'|'DAYS' ){
+
+    public add( date: Date , count: number , unit: 'MINUTES'|'HOURS'|'DAYS' ): Date{
+        if ( !(date instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
+
         let nextWindow = this.getNextWorkingTime(date);
         
         if (unit.toUpperCase() === 'DAYS' ){
@@ -249,7 +253,7 @@ export class Timer  {
 
         let timerMs = (unit.toUpperCase() === 'MINUTES' )? count *  TimerUnit.MINUTES : count * TimerUnit.HOURS ;
 
-        console.log('nextWindow', nextWindow.toString());
+        // console.log('nextWindow', nextWindow.toString());
 
         while ( timerMs !== 0 ){
             const day = this.getFormatedDate(nextWindow);
@@ -290,5 +294,12 @@ export class Timer  {
         
         return nextWindow;
     }
+
+    public async addAsync(
+        date: Date , count: number , unit: 'MINUTES'|'HOURS'|'DAYS'  
+    ): Promise<Date>{
+        return this.add(date, count, unit);
+    }
+
 
 }
