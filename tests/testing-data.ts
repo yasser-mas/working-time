@@ -36,14 +36,17 @@ export const VALID_TIMER_CONFIG = {
         {
           from: '08:00',
           to: '14:00'
+        },{
+          from: '16:00',
+          to: '20:00'
         }
       ]
     },
     exceptionalWorkingHours: {
       '2019-06-16': [
         {
-          from: '12:15',
-          to: '16:00'
+          from: '14:00',
+          to: '20:00'
         }
       ],
       '2019-06-26': [
@@ -53,6 +56,12 @@ export const VALID_TIMER_CONFIG = {
         }
       ],
       '2019-08-13': [
+        {
+          from: '10:00',
+          to: '12:00'
+        }
+      ],
+      '2020-06-16': [
         {
           from: '10:00',
           to: '12:00'

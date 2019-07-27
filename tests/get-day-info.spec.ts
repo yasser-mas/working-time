@@ -3,7 +3,6 @@ import TimerFactory from '../source/index';
 import { Timer } from '../source/lib/timer';
 import { VALID_TIMER_CONFIG } from './testing-data';
 import { ITimerParams } from '../source/lib/interfaces/i-timer-params';
-import { TimerUnit } from '../source/lib/timer-unit';
 
 
 function getCopy(obj: ITimerParams ):ITimerParams{
@@ -39,6 +38,14 @@ describe('Get Day Info Test Cases', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = '2019-07-25' as any ;
 
+    return timerInstance.getDayInfoAsync(day).catch(e =>{
+        expect(e.message).to.be.eql('Invalid Date !')
+    });
+  });
+
+  it('should throw exception on submit nullable date', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = null as any ;
     return timerInstance.getDayInfoAsync(day).catch(e =>{
         expect(e.message).to.be.eql('Invalid Date !')
     });

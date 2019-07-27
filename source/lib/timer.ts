@@ -145,6 +145,10 @@ export class Timer  {
     }
 
     public isWorkingTime( date: Date ): boolean{
+        if ( !(date instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
+        
         const bufferedDate = this.getDayInfo(date);
 
         if ( bufferedDate.isVacation || bufferedDate.isWeekend ) {
@@ -171,7 +175,17 @@ export class Timer  {
         return inWindow;
     }
 
+    public async isWorkingTimeAsync(
+        date: Date 
+    ): Promise<boolean>{
+        return this.isWorkingTime(date);
+    }
+
     public getNextWorkingTime( date: Date ): Date{
+        if ( !(date instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
+        
         const bufferedDate = this.getDayInfo(date);
         let nextWindow: null | Date = null ; 
 
@@ -215,6 +229,13 @@ export class Timer  {
     
     }
 
+
+    public async getNextWorkingTimeAsync(
+        date: Date 
+    ): Promise<Date>{
+        return this.getNextWorkingTime(date);
+    }
+    
     public add( date: Date , count: number , unit: 'MINUTES'|'HOURS'|'DAYS' ){
         let nextWindow = this.getNextWorkingTime(date);
         
