@@ -89,96 +89,87 @@ describe('Get Next Working Time Test Cases', function() {
   });
 
 
-/* 
-
-
-  it('should throw exception on submit invalid date', function() {
+  it('should be next working day first shift , on submit weekend time', function() {
     const timerInstance = timer.setConfig(timerConfig);
-    let day = '2019-07-25' as any ;
-    return timerInstance.isWorkingTimeAsync(day).catch(e =>{
-        expect(e.message).to.be.eql('Invalid Date !')
-    });
-  });
-
-
-
-  it('should not be working time, on submit weekend day', function() {
-    const timerInstance = timer.setConfig(timerConfig);
-    let day = new Date('2019-07-26');
+    let day = new Date('2019-07-19');
     day.setHours(12,0)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.false;
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eqls(new Date('2019-07-21 08:00'));
 
   });
 
-
-  it('should not be working time, on submit vacation day', function() {
+  it('should be next working day first shift , on submit vacation time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-08-05');
     day.setHours(12,0)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.false;
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eqls(new Date('2019-08-06 08:00'));
 
   });
-  
 
-  it('should be working time, on submit in window exceptional working hours', function() {
+  it('should be same time , on submit exceptional working time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-06-16');
     day.setHours(15,0)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.true;
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eqls(new Date('2019-06-16 15:00'));
 
   });
 
-  it('should not be working time, on submit out of window exceptional working hours', function() {
+
+  it('should be next shift start time , on submit out of window exceptional working time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-06-16');
-    day.setHours(12,0)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.false;
+    day.setHours(10,0)
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eqls(new Date('2019-06-16 14:00'));
 
   });
 
 
-  it('should be working time, on submit in window very old date', function() {
+  it('should be same time, on submit very old date in shift time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2016-06-16');
-    day.setHours(13,0)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.true;
+    day.setHours(13,0);
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eql(new Date('2016-06-16 13:00'));
 
   });
-  
 
-  it('should be working time, on submit in window far future date', function() {
+
+
+  it('should be next shift start time, on submit very old date before first shift', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2016-06-16');
+    day.setHours(6,0);
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eql(new Date('2016-06-16 08:00'));
+
+  });
+
+  it('should be same time, on submit far future date in shift time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2023-07-16');
-    day.setHours(13,0)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.true;
-
+    day.setHours(13,0);
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eql(new Date('2023-07-16 13:00'));
   });
-  
 
-  it('should be working time, on submit in window far future exceptional working day', function() {
+  it('should be same time, on submit far future exceptional working date in shift time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2020-06-16');
-    day.setHours(10,30)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.true;
-
+    day.setHours(10,30);
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eql(new Date('2020-06-16 10:30'));
   });
-  
-  it('should not be working time, on submit out of window far future date', function() {
+
+  it('should be next shift start time, on submit far future exceptional working date before shift time', function() {
     const timerInstance = timer.setConfig(timerConfig);
-    let day = new Date('2023-07-16');
-    day.setHours(6,0)
-    let isWorkingTime = timerInstance.isWorkingTime(day);
-    expect(isWorkingTime).to.be.false;
-
+    let day = new Date('2020-06-16');
+    day.setHours(8,30);
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eql(new Date('2020-06-16 10:00'));
   });
-  
- */
+
 
 });
