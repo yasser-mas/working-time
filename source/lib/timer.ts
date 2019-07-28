@@ -253,8 +253,6 @@ export class Timer  {
 
         let timerMs = (unit.toUpperCase() === 'MINUTES' )? count *  TimerUnit.MINUTES : count * TimerUnit.HOURS ;
 
-        // console.log('nextWindow', nextWindow.toString());
-
         while ( timerMs !== 0 ){
             const day = this.getFormatedDate(nextWindow);
             const bufferedDate = this.getDayInfo(nextWindow);

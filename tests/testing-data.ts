@@ -1,5 +1,5 @@
 export const VALID_TIMER_CONFIG = {
-    vacations: ['2019-06-26' , '2019-06-27', '2019-08-05'],
+    vacations: ['2019-06-26' , '2019-06-27','2019-07-28', '2019-08-05'],
     normalWorkingHours: {
       0: [
         {

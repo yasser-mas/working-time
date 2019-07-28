@@ -59,8 +59,8 @@ async function test (){
     // console.log( 'Day Info -> ', timer.getDayInfo(new Date("07-14-2019")));
     // console.log( 'isWorkingTime -> ', timer.isWorkingTime(new Date("06-30-2019 20:20")));
     // console.log( 'getNextWorkingTime -> ', timer.getNextWorkingTime(new Date("06-30-2019 20:20")).toString());
-    console.log( 'Add Days -> ', timer.add(new Date("06-30-2019 20:20"), 1 , 'DAYS').toString());
-    // console.log( 'Add Minutes Or Hours -> ',timer.add(new Date("06-30-2019 20:15"), 2 , 'HOURS').toString());
+    // console.log( 'Add Days -> ', timer.add(new Date("06-30-2019 20:20"), 1 , 'DAYS').toString());
+    console.log( 'Add Minutes Or Hours -> ',timer.add(new Date("06-30-2019 20:15"), 2 , 'HOURS').toString());
 
 
     //  TimerFactory.clearTimer();

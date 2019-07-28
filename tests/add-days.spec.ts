@@ -73,7 +73,7 @@ describe('Add Days Test Cases', function() {
     let day = new Date('2019-07-25');
     day.setHours(21,0)
     let nextWorkingTime = timerInstance.add(day, 1 , "DAYS");
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-07-29 08:00'));
+    expect(nextWorkingTime).to.be.eqls(new Date('2019-07-30 08:00'));
 
   });
 
@@ -82,7 +82,7 @@ describe('Add Days Test Cases', function() {
     let day = new Date('2019-07-25');
     day.setHours(21,0)
     let nextWorkingTime = timerInstance.add(day, 3 , "DAYS");
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-07-31 08:00'));
+    expect(nextWorkingTime).to.be.eqls(new Date('2019-08-01 08:00'));
 
   });
 

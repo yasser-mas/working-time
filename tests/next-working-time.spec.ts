@@ -65,7 +65,7 @@ describe('Get Next Working Time Test Cases', function() {
     let day = new Date('2019-07-25');
     day.setHours(21,0)
     let nextWorkingTime = timerInstance.getNextWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-07-28 08:00'));
+    expect(nextWorkingTime).to.be.eqls(new Date('2019-07-29 08:00'));
 
   });
 
