@@ -127,6 +127,26 @@ describe('Get Next Working Time Test Cases', function() {
   });
 
 
+  it('should be same time, on submit in window exceptional working time and day is weekend', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-07-19');
+    day.setHours(11,0);
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eql(day);
+
+  });
+
+
+  it('should first minute in the window for this day , on submit in window exceptional working time and day is weekend', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-07-19');
+    day.setHours(9,0);
+    let nextWorkingTime = timerInstance.getNextWorkingTime(day);
+    expect(nextWorkingTime).to.be.eql(new Date('2019-07-19 10:00'));
+
+  });
+
+
   it('should be same time, on submit very old date in shift time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2016-06-16');

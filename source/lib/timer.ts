@@ -150,8 +150,7 @@ export class Timer  {
         } 
         
         const bufferedDate = this.getDayInfo(date);
-
-        if ( bufferedDate.isVacation || bufferedDate.isWeekend ) {
+        if ( bufferedDate.isVacation || ( bufferedDate.isWeekend && !bufferedDate.isExceptional )  ) {
             return false;
         }
 
@@ -189,7 +188,7 @@ export class Timer  {
         const bufferedDate = this.getDayInfo(date);
         let nextWindow: null | Date = null ; 
 
-        if ( bufferedDate.isVacation || bufferedDate.isWeekend ) {
+        if ( bufferedDate.isVacation || ( bufferedDate.isWeekend && !bufferedDate.isExceptional )  ) {
             let nextDaty = new Date( date.getTime() + TimerUnit.DAYS ).setHours(0,0,0,0);
             return this.getNextWorkingTime(new Date(nextDaty));
         }

@@ -1,5 +1,6 @@
 # Ignore Output folder 
-build/
+build
+dist
 
 # Ignore Node Modules 
 

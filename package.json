@@ -2,16 +2,20 @@
   "name": "working-time",
   "version": "1.0.0",
   "description": "working time calculator",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "start": "tsc  && node build/index.js",
-    "build": "tsc -d && node build/index.js",
+    "start": "tsc  && node dist/index.js",
+    "prepare": "tsc",
+    "prepublish": "tsc",
+    "build": "tsc",
     "test": "mocha -r ts-node/register tests/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yasser-mas/working-time.git"
   },
+  "keywords": ["working", "timer", "business", "moment", "time", "hours"],
   "author": "Yasser Abu Omira <yasser.mas2@gmail.com>",
   "license": "MIT",
   "bugs": {

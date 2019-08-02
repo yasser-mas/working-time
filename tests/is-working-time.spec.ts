@@ -137,6 +137,17 @@ describe('Is Working Time Test Cases', function() {
   });
 
 
+
+  it('should be working time, on submit in window exceptional working hours and day is weekend', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-07-19');
+    day.setHours(11,0)
+    let isWorkingTime = timerInstance.isWorkingTime(day);
+    expect(isWorkingTime).to.be.true;
+
+  });
+
+
   it('should be working time, on submit in window very old date', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2016-06-16');

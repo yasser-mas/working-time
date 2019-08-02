@@ -149,6 +149,17 @@ describe('Add Days Test Cases', function() {
 
   });
 
+
+
+  it('should count exceptional working day, on submit before exceptional working day and day is weekend +1 Day ', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-07-18');
+    day.setHours(10,0);
+    let nextWorkingTime = timerInstance.add(day, 1 , "DAYS");
+    expect(nextWorkingTime).to.be.eql(new Date('2019-07-19 10:00'));
+
+  });
+
   it('should be next day, on submit very old date in shift time +1 DAY', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2016-06-15');

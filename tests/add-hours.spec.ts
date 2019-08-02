@@ -106,6 +106,16 @@ describe('Add Hours Test Cases', function() {
 
   });
 
+  it('should be after two hours, on submit in window exceptional working day and day is vacation +1 HOURS ', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-07-19');
+    day.setHours(10,0);
+    let nextWorkingTime = timerInstance.add(day, 1 , "HOURS");
+    expect(nextWorkingTime).to.be.eql(new Date('2019-07-19 11:00'));
+
+  });
+
+
   it('should be next exceptional day after two hours, on submit before exceptional day after working time +2 HOURS', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-06-15');
