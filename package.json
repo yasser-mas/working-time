@@ -1,7 +1,7 @@
 {
-  "name": "working-time",
+  "name": "working-times",
   "version": "1.0.0",
-  "description": "working time calculator",
+  "description": "Working Times calculator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,12 +15,26 @@
     "type": "git",
     "url": "git+https://github.com/yasser-mas/working-time.git"
   },
-  "keywords": ["working", "timer", "business", "moment", "time", "hours"],
+  "keywords": [
+    "working",
+    "working-times",
+    "timer",
+    "business",
+    "moment",
+    "time",
+    "hours"
+  ],
   "author": "Yasser Abu Omira <yasser.mas2@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/yasser-mas/working-time/issues"
   },
+  "contributors": [
+    {
+      "name": "Yasser Abu Omira",
+      "email": "yasser.mas2@gmail.com"
+    }
+  ],
   "homepage": "https://github.com/yasser-mas/working-time#readme",
   "dependencies": {},
   "devDependencies": {

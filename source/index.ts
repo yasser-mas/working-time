@@ -1,8 +1,6 @@
 import { Timer } from "./lib/timer";
-import { VALID_TIMER_CONFIG } from './default-config';
 
-
-export default class TimerFactory {
+ class TimerFactory {
 
     private static timer: Timer | null ;
 
@@ -17,3 +15,5 @@ export default class TimerFactory {
         this.timer = null ;
     }
 }
+
+export = TimerFactory;

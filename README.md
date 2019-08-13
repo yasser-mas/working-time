@@ -1,7 +1,7 @@
-# Working Time
+# Working Times
 
-Working Time is a node js module to calculate business times and generating working hours calendar.
-"Working Time" helps you to check if any day is working day or weekend or vacation  or even it's an exceptional working day.
+Working Times is a node js module to calculate working times and generating working hours calendar.
+"Working Times" helps you to check if any day is working day or weekend or vacation  or even it's an exceptional working day.
 
 
 # key features !
@@ -25,7 +25,7 @@ Working Time is a node js module to calculate business times and generating work
 Install via NPM:
 
 ```sh
-$ npm install working-time
+$ npm install working-times
 ```
 
 
@@ -59,6 +59,11 @@ export class BusinessDay {
  **Set Timer Config** 
 
 ```ts
+import TimerFactory from 'business-timer';
+// Or 
+const  timer  = require('business-timer');
+
+
 const timer = TimerFactory.getTimerInstance();
 
 timer.setConfigAsync(VALID_TIMER_CONFIG).then(t => {
