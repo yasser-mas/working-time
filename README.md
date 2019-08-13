@@ -59,9 +59,9 @@ export class BusinessDay {
  **Set Timer Config** 
 
 ```ts
-import TimerFactory from 'business-timer';
+import TimerFactory from 'working-times';
 // Or 
-const  timer  = require('business-timer');
+const  timer  = require('working-times');
 
 
 const timer = TimerFactory.getTimerInstance();
