@@ -20,6 +20,12 @@ Working Times is a node js module to calculate working times and generating work
 * Check if certain time is working time or not ( past & current & future )
 * Get nex working time from certain time 
 
+##### Release 1.1.* +
+
+* Set working timeout 
+
+
+
 ### Installation
 
 Install via NPM:
@@ -395,9 +401,104 @@ To add working time to a specific time you have to call add function and it will
 ```
 
 
+ **Set working timeout** 
+
+Sets a timer after adding ( X ) working time, which executes the given callback function once the timer expires.
+Function will return WorkingTimeout Class
+
+> PS: If time in the past after adding ( X ) working duration, the timer will be executed at the soonest working time 
+
+
+```ts
+
+  timer.setWorkingTimeout(
+        baseDate: Date ,  // new Date()
+        duration: number ,  // 10 
+        unit: 'MINUTES'|'HOURS'|'DAYS', // MINUTES 
+        cb : Function,  // ()=>{ console.log('fired')}
+        desc: string  // 'Auto reject request #4354'
+    );
+    
+    // returns WorkingTimeout
+    class WorkingTimeout {
+        public clearTimeout() {
+        }
+
+        public get baseDate(): Date {
+        }
+
+        public get fireDate(): Date {
+        }
+
+        public get duration(): number {
+        }
+
+        public get description(): string {
+        }
+        public set description(value: string) {
+        }
+        public get callback(): Function {
+        }
+        public set callback(value: Function) {
+        }
+        public get timeUnit(): 'MINUTES' | 'HOURS' | 'DAYS' {
+        }
+
+        public get fired():boolean{
+        }
+        
+        public get cancelled():boolean{
+        }
+
+        public get remainingTime(): number {
+        }
+
+    }
+
+
+
+
+    try {
+        let day = new Date('2019-08-20');
+        let cb = function(){
+          return 1 ;
+        }
+        let timeout = timerInstance.setWorkingTimeout(day, 20 , 'MINUTES',cb , 'Timeout for confirm order #654');
+        let timeout = timerInstance.setWorkingTimeout(day, 8 , 'HOURS',cb , 'Timeout for cancel order #654');
+        let timeout = timerInstance.setWorkingTimeout(day, 5 , 'DAYS',cb , 'Timeout for refresh config ');
+        console.log(timeout)
+        
+        // WorkingTimeout Getters 
+        timeout.fireDate      // Return exact fire date ( Date )
+        timeout.baseDate      // Return given date ( Date )
+        timeout.duration      // Return duration from given date to the fire date ( in MS )
+        timeout.description   // Return given description ( string)
+        timeout.callback      // Return given callback funtion ( Function )  
+        timeout.remainingTime // Return remaining time from now to the fire date ( in MS )  
+        timeout.fired         // To check if timer fired or not ( boolean )
+        timeout.cancelled     // To check if timer cancelled or not ( boolean )  
+        timeout.clearTimeout  // To cancel timeout 
+
+        timeout.callback = ()=>{}       // To update callback funtion 
+        timeout.description = 'new Des' // To update timer description 
+
+    } catch (error) {
+        console.log(error.message);        
+    }
+
+```
+
+
+
+
 ### To do
 
- - Add set working time out to fire callback after adding specific working time to a date time 
+ - Get next working day
+ - Get previous working day
+ - Subtract working time from given time
+ - Working time between two times
+ - Vacation wildcard
+
 
 License
 ----

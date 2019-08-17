@@ -3,6 +3,7 @@ import { TimerValidator } from "./timer-validator";
 import { TimerUnit } from "./timer-unit";
 import { BusinessDay } from "./interfaces/i-business-day";
 import TimerError from "./timer-error";
+import WorkingTimeout from "./working-timeout";
 
 
 export class Timer  {
@@ -235,7 +236,7 @@ export class Timer  {
         return this.getNextWorkingTime(date);
     }
 
-    public add( date: Date , count: number , unit: 'MINUTES'|'HOURS'|'DAYS' ): Date{
+    public add( date: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS' ): Date{
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
         } 
@@ -243,20 +244,19 @@ export class Timer  {
         let nextWindow = this.getNextWorkingTime(date);
         
         if (unit.toUpperCase() === 'DAYS' ){
-            for (let index = 1; index <= count; index++) {
+            for (let index = 1; index <= duration; index++) {
                 let nextDate = new Date(nextWindow.setHours(0,0,0,0) + TimerUnit.DAYS);
                 nextWindow = this.getNextWorkingTime(nextDate);
             }
             return nextWindow;
         }
 
-        let timerMs = (unit.toUpperCase() === 'MINUTES' )? count *  TimerUnit.MINUTES : count * TimerUnit.HOURS ;
+        let timerMs = (unit.toUpperCase() === 'MINUTES' )? duration *  TimerUnit.MINUTES : duration * TimerUnit.HOURS ;
 
         while ( timerMs !== 0 ){
             const day = this.getFormatedDate(nextWindow);
             const bufferedDate = this.getDayInfo(nextWindow);
             let nextWindowMs = nextWindow.getTime();
-            console.log('timerMS', timerMs);
 
             bufferedDate.workingHours.forEach((window) => {
                 const startTime = new Date(`${day} ${window.from}`).getTime();
@@ -292,10 +292,23 @@ export class Timer  {
         return nextWindow;
     }
 
+
+    public setWorkingTimeout(
+        baseDate: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS', cb : Function, desc: string
+    ): WorkingTimeout{
+        
+        let fireDate = this.add(baseDate, duration, unit);
+        if ( fireDate.getTime() < Date.now() ){
+            fireDate = this.getNextWorkingTime(new Date());
+        }
+        return new WorkingTimeout(baseDate, fireDate, duration, unit, cb, desc);
+    }
+
+
     public async addAsync(
-        date: Date , count: number , unit: 'MINUTES'|'HOURS'|'DAYS'  
+        date: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS'  
     ): Promise<Date>{
-        return this.add(date, count, unit);
+        return this.add(date, duration, unit);
     }
 
 
