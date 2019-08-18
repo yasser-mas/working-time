@@ -82,6 +82,7 @@ export class Timer  {
         for ( let i = startDate ; i <= endDate ; i += TimerUnit.DAYS ){
             let date = new Date(i);
             const FULLDAY = this.getFormatedDate(date) ;
+            const WILDCARDDAY = '*' + FULLDAY.substr(4) ;
             const BUSINESSDAY = new BusinessDay(false,false,false,[]);
 
             if ( timerParams.normalWorkingHours[date.getDay()] ) {
@@ -92,12 +93,14 @@ export class Timer  {
                 BUSINESSDAY.isWeekend = true ;
             }
             
-            if ( timerParams.exceptionalWorkingHours[FULLDAY]){
+            if ( timerParams.exceptionalWorkingHours[FULLDAY] || timerParams.exceptionalWorkingHours[WILDCARDDAY] ){
                 BUSINESSDAY.isExceptional = true ;
-                BUSINESSDAY.workingHours = timerParams.exceptionalWorkingHours[FULLDAY];
+                BUSINESSDAY.workingHours = (timerParams.exceptionalWorkingHours[FULLDAY]) ?
+                                                timerParams.exceptionalWorkingHours[FULLDAY] :
+                                                timerParams.exceptionalWorkingHours[WILDCARDDAY];
             }
 
-            if ( timerParams.vacations.includes(FULLDAY)) {
+            if ( timerParams.vacations.includes(FULLDAY) || timerParams.vacations.includes(WILDCARDDAY) ) {
                 BUSINESSDAY.isVacation = true ;
                 BUSINESSDAY.workingHours = [];
 

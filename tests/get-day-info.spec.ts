@@ -113,6 +113,34 @@ describe('Get Day Info Test Cases', function() {
   });
 
 
+  it('should be vacation on submit date included as vacation wildcard', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-09-05');
+    let dayInfo = timerInstance.getDayInfo(day);
+    let dayInfo2 = timerInstance.getDayInfo(new Date('2021-09-05'));
+    expect(dayInfo.isExceptional).to.be.eql(dayInfo2.isExceptional).to.be.false;
+    expect(dayInfo.isVacation).to.be.eql(dayInfo2.isVacation).to.be.true;
+    expect(dayInfo.isWeekend).to.be.eql(dayInfo2.isWeekend).to.be.false;
+
+  });
+
+
+
+  it('should be exceptionale on submit date included as exceptional wildcard', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-08-16');
+    let dayInfo = timerInstance.getDayInfo(day);
+    let dayInfo2 = timerInstance.getDayInfo(new Date('2021-08-16'));
+    let dayInfo3 = timerInstance.getDayInfo(new Date('2001-08-16'));
+    expect(dayInfo.isExceptional).to.be.eql(dayInfo2.isExceptional).to.be.eql(dayInfo3.isExceptional).to.be.true;
+    expect(dayInfo.workingHours).to.be.eql(dayInfo2.workingHours).to.be.eql(dayInfo3.workingHours).to.be.eql(timerConfig.exceptionalWorkingHours['*-08-16']);
+
+  });
+
+
+
+
+
 
 
 });
