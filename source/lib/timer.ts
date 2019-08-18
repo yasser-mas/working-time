@@ -236,6 +236,23 @@ export class Timer  {
         return this.getNextWorkingTime(date);
     }
 
+
+    public  getNextWorkingDay(
+        date: Date 
+    ): Date{
+        if ( !(date instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
+        let tomorrow = new Date(date.setHours(24,0,0,0));
+        return this.getNextWorkingTime(tomorrow);
+    }
+
+    public async getNextWorkingDayAsync(
+        date: Date 
+    ): Promise<Date>{
+        return this.getNextWorkingDay(date);
+    }
+
     public add( date: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS' ): Date{
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
