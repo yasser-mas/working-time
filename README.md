@@ -9,20 +9,25 @@ Working Times is a node js module to calculate working times and generating work
 * Written in Typescript
 * Zero dependencies
 * Works on browsers and node js 
-* Sync and Async 
-* Supports multiple shifts 
-* Supports Weekend 
-* Supports Vacations 
-* Supports exceptional working days 
-* Old dates calculations
-* Adding working days, hours and minutes to date 
-* View date info 
-* Check if certain time is working time or not ( past & current & future )
-* Get nex working time from certain time 
+* [Sync and Async](#example) 
+* [Supports multiple shifts](#set-timer-configuration) 
+* [Supports Weekend](#set-timer-configuration) 
+* [Supports Vacations](#set-timer-configuration) 
+* [Supports exceptional working days](#set-timer-configuration) 
+* [Old dates calculations](#example)
+* [Adding working days, hours and minutes to date](#add-working-time-to-date) 
+* [Get date info](#get-date-info) 
+* [Check if certain time is working time or not ( past & current & future )](#is-working-time)
+* [Get next working time from certain time](#get-next-working-time) 
 
 ##### Release 1.1.* +
 
-* Set working timeout 
+* [Set working timeout](#set-working-timeout) 
+
+
+##### Release 1.1.1 
+
+* [Get next working day](#get-next-working-day) 
 
 
 
@@ -62,7 +67,6 @@ export class BusinessDay {
 - All Synchronous should be in try and catch block because it will throw an error in case of errors 
 ```
 
- **Set Timer Config** 
 
 ```ts
 import TimerFactory from 'working-times';
@@ -92,11 +96,7 @@ let timer = await timer.setConfigAsync(VALID_TIMER_CONFIG).catch(e =>{ console.l
 if(timer){
 
 }
-```
 
-**Check Date Info** 
-
-```ts
 // All Synchronous should be in try and catch block because it will throw an error in case of errors
 try {
     timer.getDayInfo(new Date("07-14-2019"));
@@ -142,7 +142,7 @@ To instantiate Timer you have to call getTimerInstance function and all subseque
 const timer = TimerFactory.getTimerInstance();
 ```
 
- **Set Timer Configuration** 
+#### Set timer configuration
 
 ```ts
 export const VALID_TIMER_CONFIG = {
@@ -244,7 +244,7 @@ export const VALID_TIMER_CONFIG = {
     how many days in the future should be buffered on setting timer configuration
 
 
- **View buffered calendar** 
+#### View buffered calendar
 
 Buffered canedar is javascript map of days infos 
 
@@ -267,7 +267,7 @@ Buffered canedar is javascript map of days infos
 ```
 
 
- **Get Date Info** 
+#### Get date info 
 
 To get date info you have to call getDayInfo function and it will return BusinessDay class 
 
@@ -307,7 +307,7 @@ To get date info you have to call getDayInfo function and it will return Busines
 ```
 
 
- **Is working Time?** 
+#### Is working time
 
 To check if a specific time is working time or not you have to call isWorkingTime function and it will return boolean 
 
@@ -334,7 +334,7 @@ To check if a specific time is working time or not you have to call isWorkingTim
 ```
 
 
- **Get Next Working Time** 
+#### Get Next Working Time
 
 To next working time from a specific time you have to call getNextWorkingTime function and it will return a Date object 
 
@@ -359,7 +359,7 @@ To next working time from a specific time you have to call getNextWorkingTime fu
 
 ```
 
- **Add Working Time To Date** 
+#### Add Working Time To Date 
 
 To add working time to a specific time you have to call add function and it will return a Date object 
 
@@ -371,13 +371,10 @@ To add working time to a specific time you have to call add function and it will
 
 ```ts
 
-    timer.add( fromDate  , count , TimerUnit )
-    // Allowed timer units 
-    export enum TimerUnit {
-      HOURS , // Default
-      MINUTES ,
-      DAYS  
-    }
+    timer.add( 
+        date: Date , 
+        duration: number , 
+        unit: 'MINUTES'|'HOURS'|'DAYS'  );
 
     try {
         let t = timer.add(new Date("2016-06-16 13:00"), 3 , "DAYS");
@@ -390,18 +387,18 @@ To add working time to a specific time you have to call add function and it will
 
     // Or 
 
-    timer.addAsync(day).then(d=>{
+    timer.addAsync(new Date("2016-06-16 13:00"), 3 , "DAYS").then(d=>{
     }).catch(e =>{
     });
 
     // Or 
-    let t = await timerInstance.addAsync(day).catch(e =>{
+    let t = await timerInstance.addAsync(new Date("2016-06-16 13:00"), 3 , "DAYS").catch(e =>{
     });
 
 ```
 
 
- **Set working timeout** 
+#### Set working timeout 
 
 Sets a timer after adding ( X ) working time, which executes the given callback function once the timer expires.
 Function will return WorkingTimeout Class
@@ -487,6 +484,35 @@ Function will return WorkingTimeout Class
     }
 
 ```
+
+
+
+#### Get next working day 
+
+To get next working day from a specific datetime you have to call getNextWorkingDay function and it will return a Date object ( next day first shift start time )
+
+
+```ts
+
+    try {
+        let t = timer.getNextWorkingDay(new Date("2016-06-16 13:00"));
+        console.log(t)
+    } catch (error) {
+        console.log(error.message);        
+    }
+
+    // Or 
+
+    timer.getNextWorkingDayAsync(new Date("2016-06-16 13:00")).then(d=>{
+    }).catch(e =>{
+    });
+
+    // Or 
+    let t = await timerInstance.getNextWorkingDayAsync(new Date("2016-06-16 13:00")).catch(e =>{
+    });
+
+```
+
 
 
 
