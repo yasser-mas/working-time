@@ -1,7 +1,7 @@
 # Working Times
 
-Working Times is a node js module to calculate working times and generating working hours calendar.
-"Working Times" helps you to check if any day is working day or weekend or vacation  or even it's an exceptional working day.
+Working Times is a node js module to calculate working times and generating working hours calendar. <br />
+Working Times helps you to check if any day is working day or weekend or vacation  or even it's an exceptional working day.
 
 
 # key features !
@@ -25,9 +25,14 @@ Working Times is a node js module to calculate working times and generating work
 * [Set working timeout](#set-working-timeout) 
 
 
-##### Release 1.1.1 
+##### Release 1.1.1 +
 
 * [Get next working day](#get-next-working-day) 
+
+
+##### Release 1.1.2 + 
+
+* [Wildcard Days](#set-timer-configuration) 
 
 
 
@@ -43,7 +48,8 @@ $ npm install working-times
 ### How it works ?
 -----------
 
-When initializing timer and setting the configuration, timer module will buffer working calendar (from min buffered days to max ) which will contain all information about each day ( is vacation , is exceptional ,  is weekend , working hours). 
+When initializing timer and setting the configuration, timer module will buffer working calendar (from min buffered days to max ) which will contain all information about each day ( is vacation , is exceptional ,  is weekend , working hours). <br />
+
 On asking timer module about any day it will get this day info if exists in the buffered calendar, if not exists ? timer will extend the buffered calendar ( past or future ) then get day info.
 
 ```ts
@@ -136,7 +142,7 @@ if( dayInfo){
 
  **Construct Timer** 
  
-To instantiate Timer you have to call getTimerInstance function and all subsequence times you will call this function it will return same instance
+To instantiate Timer you have to call getTimerInstance function and all subsequence times you will call this function it will return same instance.
 
 ```ts
 const timer = TimerFactory.getTimerInstance();
@@ -146,7 +152,7 @@ const timer = TimerFactory.getTimerInstance();
 
 ```ts
 export const VALID_TIMER_CONFIG = {
-    vacations: ['2019-07-31'],
+    vacations: ['2019-07-31','*-08-15'],
     normalWorkingHours: {
       0: [
             // Sunday
@@ -196,6 +202,12 @@ export const VALID_TIMER_CONFIG = {
           from: '12:15',
           to: '16:00'
         }
+      ],
+      '*-08-10': [
+        {
+          from: '12:15',
+          to: '16:00'
+        }
       ]
     },
     minBufferedDays: 1,
@@ -203,13 +215,14 @@ export const VALID_TIMER_CONFIG = {
   }
 ```
 
-* vacations
-   vacations should be array list formated date "yyyy-mm-dd"
+* Vacations : <br />
+   vacations should be array list formated date "yyyy-mm-dd". <br />
+   vacations accepts wildcard year "*-mm-dd". <br />
 
-* normalWorkingHours
-    normal working hours should contain all working week days only ( don't include weekend days ) 
-    object key is day of the week (from 0 to 6), Sunday is 0, Monday is 1, and so on.
-    object value is array list of working time ( time formate should be "hh:mm" )
+* NormalWorkingHours : <br />
+    normal working hours should contain all working week days only ( don't include weekend days ). <br />
+    object key is day of the week (from 0 to 6), Sunday is 0, Monday is 1, and so on. <br />
+    object value is array list of working time ( time formate should be "hh:mm" ). <br />
     ```ts
         normalWorkingHours: INormalWindow[] ;
         export interface INormalWindow{
@@ -221,10 +234,11 @@ export const VALID_TIMER_CONFIG = {
         }
 
     ```
-* exceptionalWorkingHours
-    exceptional working hours should be list of exceptional working days 
-    object key is exceptional formated date "yyyy-mm-dd"
-    object value is array list of working time ( time formate should be "hh:mm" )
+* ExceptionalWorkingHours: <br />
+    exceptional working hours should be list of exceptional working days. <br />
+    object key is exceptional formated date "yyyy-mm-dd". <br />
+    exceptional working days accepts wildcard year "*-mm-dd". <br />
+    object value is array list of working time ( time formate should be "hh:mm" ). <br />
     ```ts
         exceptionalWorkingHours: IExceptionalWindow[] ;
         export interface IExceptionalWindow{
@@ -237,16 +251,16 @@ export const VALID_TIMER_CONFIG = {
 
     ```
 
-* minBufferedDays
-    how many days in the past should be buffered on setting timer configuration
+* MinBufferedDays: <br />
+    how many days in the past should be buffered on setting timer configuration.<br />
 
-* maxBufferedDays
-    how many days in the future should be buffered on setting timer configuration
+* MaxBufferedDays: <br />
+    how many days in the future should be buffered on setting timer configuration. <br />
 
 
 #### View buffered calendar
 
-Buffered canedar is javascript map of days infos 
+Buffered canedar is Javascript Map of days infos 
 
 ```ts
     timer.setConfigAsync(VALID_TIMER_CONFIG).then(t=>{
@@ -269,7 +283,7 @@ Buffered canedar is javascript map of days infos
 
 #### Get date info 
 
-To get date info you have to call getDayInfo function and it will return BusinessDay class 
+To get date info you have to call getDayInfo function and it will return BusinessDay class.
 
 ```ts
     try {
@@ -309,7 +323,7 @@ To get date info you have to call getDayInfo function and it will return Busines
 
 #### Is working time
 
-To check if a specific time is working time or not you have to call isWorkingTime function and it will return boolean 
+To check if a specific time is working time or not you have to call isWorkingTime function and it will return boolean.
 
 
 ```ts
@@ -361,12 +375,12 @@ To next working time from a specific time you have to call getNextWorkingTime fu
 
 #### Add Working Time To Date 
 
-To add working time to a specific time you have to call add function and it will return a Date object 
+To add working time to a specific time you have to call add function and it will return a Date object.
 
-> PS: On adding X working days to a date time 
->     01- If this date time before working hours timer will count this day
->     02- If this date time is working time, timer will count this day 
->     03- If this date time after working hours timer will start count from tomorrow 
+> PS: On adding X working days to a date time: <br />
+>     01- If this date time before working hours timer will count this day <br />
+>     02- If this date time is working time, timer will count this day <br />
+>     03- If this date time after working hours timer will start count from tomorrow <br />
 
 
 ```ts
@@ -401,7 +415,7 @@ To add working time to a specific time you have to call add function and it will
 #### Set working timeout 
 
 Sets a timer after adding ( X ) working time, which executes the given callback function once the timer expires.
-Function will return WorkingTimeout Class
+Function will return WorkingTimeout Class.
 
 > PS: If time in the past after adding ( X ) working duration, the timer will be executed at the soonest working time 
 
@@ -519,11 +533,9 @@ To get next working day from a specific datetime you have to call getNextWorking
 
 ### To do
 
- - Get next working day
  - Get previous working day
  - Subtract working time from given time
  - Working time between two times
- - Vacation wildcard
 
 
 License
