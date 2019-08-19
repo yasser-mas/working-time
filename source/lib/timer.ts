@@ -4,6 +4,7 @@ import { TimerUnit } from "./timer-unit";
 import { BusinessDay } from "./interfaces/i-business-day";
 import TimerError from "./timer-error";
 import WorkingTimeout from "./working-timeout";
+import { IWorkingHours } from "./interfaces/i-working-hours";
 
 
 export class Timer  {
@@ -11,6 +12,8 @@ export class Timer  {
     private bufferedCalendar : Map <string,BusinessDay> = new Map();
     private timerValidator = new TimerValidator();
     private timerParams: ITimerParams ;
+    private minBufferedDate: number ;
+    private maxBufferedDate: number ;
 
     constructor(){
     }
@@ -28,7 +31,7 @@ export class Timer  {
                 this.timerValidator.validateExceptionalWorkingDays( timerParams.exceptionalWorkingHours );
                 this.timerValidator.validateMinBuffer( timerParams.minBufferedDays );
                 this.timerValidator.validateMaxBuffer( timerParams.maxBufferedDays );
-                this.constructWorkingDays(timerParams);
+                this.constructWorkingDays(timerParams, false);
                 resolve(this);
         
             } catch (error) {
@@ -43,7 +46,7 @@ export class Timer  {
             this.timerValidator.validateExceptionalWorkingDays( timerParams.exceptionalWorkingHours );
             this.timerValidator.validateMinBuffer( timerParams.minBufferedDays );
             this.timerValidator.validateMaxBuffer( timerParams.maxBufferedDays );
-            this.constructWorkingDays(timerParams);
+            this.constructWorkingDays(timerParams, false);
             return this;
     
         } catch (error) {
@@ -73,11 +76,32 @@ export class Timer  {
         return `${YEAR}-${MONTH}-${DAY}` ;
     }
 
-    private constructWorkingDays(timerParams: ITimerParams){
+    private constructWorkingDays(timerParams: ITimerParams , extend: boolean){
         let today = new Date().setHours(0,0,0,0);
         let startDate = today - ( TimerUnit.DAYS * Math.abs(timerParams.minBufferedDays));
         let endDate = today + ( TimerUnit.DAYS * Math.abs(timerParams.maxBufferedDays));
+        let processedCalendar : Map <string,BusinessDay> = new Map();
+        let append = null ; 
 
+        if(extend){
+            
+            if(startDate < this.minBufferedDate ) {
+               endDate =  this.minBufferedDate - TimerUnit.DAYS ;
+               this.minBufferedDate = startDate;
+               append = 'start';
+            }
+                            
+            if (endDate > this.maxBufferedDate ){
+                startDate =  this.maxBufferedDate + TimerUnit.DAYS ;
+                this.maxBufferedDate = endDate;
+                append = 'end';
+            }  
+
+        }else{
+
+            this.minBufferedDate = startDate ; 
+            this.maxBufferedDate = endDate;
+        }
 
         for ( let i = startDate ; i <= endDate ; i += TimerUnit.DAYS ){
             let date = new Date(i);
@@ -103,13 +127,34 @@ export class Timer  {
             if ( timerParams.vacations.includes(FULLDAY) || timerParams.vacations.includes(WILDCARDDAY) ) {
                 BUSINESSDAY.isVacation = true ;
                 BUSINESSDAY.workingHours = [];
-
             }
-            this.bufferedCalendar.set(FULLDAY, BUSINESSDAY );
+            processedCalendar.set(FULLDAY, BUSINESSDAY );
         }
 
+        if(append){
+            let oldBuffered = new Map(this.bufferedCalendar);
+            this.bufferedCalendar.clear();
+            
+            if(append == 'start' ) {
+                this.addToBuffer(processedCalendar);
+                this.addToBuffer(oldBuffered);
+            }
+                            
+            if (append == 'end' ){
+                this.addToBuffer(oldBuffered);
+                this.addToBuffer(processedCalendar);
+            }
+
+        }else{
+            this.bufferedCalendar = processedCalendar;
+        }
     }
     
+    private addToBuffer( map:Map< string, BusinessDay>){
+        map.forEach((val,key)=>{
+            this.bufferedCalendar.set(key , val);
+        }); 
+    }
 
     private getDaysBetween(from: Date, to: Date ){
 
@@ -136,7 +181,7 @@ export class Timer  {
                 this.timerParams.minBufferedDays = daysBetween - 5 ;
 
             }
-            this.constructWorkingDays(this.timerParams);
+            this.constructWorkingDays(this.timerParams, true);
             bufferedDate = <BusinessDay> this.getBufferedCalendar.get(formatedDate);
         }
         return bufferedDate;
