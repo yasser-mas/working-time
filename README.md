@@ -37,7 +37,7 @@ Working Times helps you to check if any day is working day or weekend or vacatio
 
 ##### Release 1.1.4 + 
 
-* Get previous working day
+* [Get previous working day](#Get-previous-working-day)
 
 
 
