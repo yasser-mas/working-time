@@ -301,6 +301,31 @@ export class Timer  {
         return this.getNextWorkingDay(date);
     }
 
+
+
+    public  getPreviousWorkingDay(
+        date: Date 
+    ): Date{
+        if ( !(date instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
+        let prevDate = new Date(date.setHours(0,0,0,0) - TimerUnit.DAYS );
+        let dayInfo = this.getDayInfo(prevDate);
+        if ( (dayInfo.isVacation || dayInfo.isWeekend) && !dayInfo.isExceptional ) {
+            return this.getPreviousWorkingDay(prevDate);
+        }
+        else {
+            return this.getNextWorkingTime(prevDate);
+        }
+    }
+
+    public async getPreviousWorkingDayAsync(
+        date: Date 
+    ): Promise<Date>{
+        return this.getPreviousWorkingDay(date);
+    }
+
+
     public add( date: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS' ): Date{
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');

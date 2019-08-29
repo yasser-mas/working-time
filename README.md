@@ -35,6 +35,11 @@ Working Times helps you to check if any day is working day or weekend or vacatio
 * [Wildcard Days](#set-timer-configuration) 
 
 
+##### Release 1.1.4 + 
+
+* Get previous working day
+
+
 
 ### Installation
 
@@ -528,12 +533,38 @@ To get next working day from a specific datetime you have to call getNextWorking
 ```
 
 
+#### Get previous working day 
+
+To get previous working day from a specific datetime you have to call getPreviousWorkingDay function and it will return a Date object ( previous day first shift start time )
+
+
+```ts
+
+    try {
+        let t = timer.getPreviousWorkingDay(new Date("2016-06-16 13:00"));
+        console.log(t)
+    } catch (error) {
+        console.log(error.message);        
+    }
+
+    // Or 
+
+    timer.getPreviousWorkingDayAsync(new Date("2016-06-16 13:00")).then(d=>{
+    }).catch(e =>{
+    });
+
+    // Or 
+    let t = await timerInstance.getPreviousWorkingDayAsync(new Date("2016-06-16 13:00")).catch(e =>{
+    });
+
+```
+
+
 
 
 
 ### To do
 
- - Get previous working day
  - Subtract working time from given time
  - Working time between two times
 
