@@ -170,6 +170,10 @@ export class Timer  {
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
         } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+
         let formatedDate = this.getFormatedDate(date);
         let bufferedDate = <BusinessDay> this.getBufferedCalendar.get(formatedDate);
         if (!bufferedDate){
@@ -197,6 +201,10 @@ export class Timer  {
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
         } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+
         
         const bufferedDate = this.getDayInfo(date);
         if ( bufferedDate.isVacation || ( bufferedDate.isWeekend && !bufferedDate.isExceptional )  ) {
@@ -233,6 +241,10 @@ export class Timer  {
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
         } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+
         
         const bufferedDate = this.getDayInfo(date);
         let nextWindow: null | Date = null ; 
@@ -291,6 +303,10 @@ export class Timer  {
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
         } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+
         let tomorrow = new Date(date.setHours(24,0,0,0));
         return this.getNextWorkingTime(tomorrow);
     }
@@ -309,6 +325,10 @@ export class Timer  {
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
         } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+
         let prevDate = new Date(date.setHours(0,0,0,0) - TimerUnit.DAYS );
         let dayInfo = this.getDayInfo(prevDate);
         if ( (dayInfo.isVacation || dayInfo.isWeekend) && !dayInfo.isExceptional ) {
@@ -330,6 +350,10 @@ export class Timer  {
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
         } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+
 
         let nextWindow = this.getNextWorkingTime(date);
         
@@ -386,7 +410,13 @@ export class Timer  {
     public setWorkingTimeout(
         baseDate: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS', cb : Function, desc: string
     ): WorkingTimeout{
-        
+        if ( !(baseDate instanceof Date)  ){
+            throw new TimerError('Invalid Date !');
+        } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+
         let fireDate = this.add(baseDate, duration, unit);
         if ( fireDate.getTime() < Date.now() ){
             fireDate = this.getNextWorkingTime(new Date());
