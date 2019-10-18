@@ -39,6 +39,10 @@ Working Times helps you to check if any day is working day or weekend or vacatio
 
 * [Get previous working day](#Get-previous-working-day)
 
+##### Release 1.1.5 + 
+
+* [Get Working time between two times](#Get-Working-time-between-two-times)
+
 
 
 ### Installation
@@ -560,13 +564,53 @@ To get previous working day from a specific datetime you have to call getPreviou
 ```
 
 
+#### Get Working time between two times
 
+You can calculate working time (Dates , Minutes , Hours ) between two times.  
+
+> PS: On calculating working days between two dates the function will not calculate the start date if it's a working day so it will be ignored  <br />
+> Get working minutes and hours will return float ( 1.5 = one day and half ...etc )
+>
+
+
+```ts
+
+    workingTimeBetween( 
+                        from: Date, 
+                        to: Date  , 
+                        unit: 'MINUTES'|'HOURS'|'DAYS'): Number {}
+
+
+    try {
+
+        let formDay = new Date('2019-07-22 06:00:00');
+        let toDay = new Date('2019-07-23 12:00:00');
+
+        let t = timer.workingTimeBetween(formDay, toDay , "DAYS");
+        let t = timer.workingTimeBetween(formDay, toDay , "MINUTES");
+        let t = timer.workingTimeBetween(formDay, toDay , "HOURS");
+        console.log(t)
+    } catch (error) {
+        console.log(error.message);        
+    }
+
+    // Or 
+
+    timer.workingTimeBetweenAsync(formDay, toDay , "DAYS").then(d=>{
+    }).catch(e =>{
+    });
+
+    // Or 
+    let t = await timerInstance.workingTimeBetweenAsync(formDay, toDay , "DAYS").catch(e =>{
+    });
+
+```
 
 
 ### To do
 
  - Subtract working time from given time
- - Working time between two times
+
 
 
 License
