@@ -22,23 +22,6 @@ export class Timer  {
         timerParams: ITimerParams
     ) : Timer {  
         this.timerParams = timerParams ;
-
-        /* return new Promise((resolve, reject) => {
-            
-            try {
-                this.timerValidator.validateVacations( timerParams.vacations );
-                this.timerValidator.validateNormalWorkingDays( timerParams.normalWorkingHours );
-                this.timerValidator.validateExceptionalWorkingDays( timerParams.exceptionalWorkingHours );
-                this.timerValidator.validateMinBuffer( timerParams.minBufferedDays );
-                this.timerValidator.validateMaxBuffer( timerParams.maxBufferedDays );
-                this.constructWorkingDays(timerParams, false);
-                resolve(this);
-        
-            } catch (error) {
-                reject(new TimerError(error.message)) ;
-            }
-
-        }); */
         
         try {
             this.timerValidator.validateVacations( timerParams.vacations );
@@ -197,6 +180,78 @@ export class Timer  {
         return this.getDayInfo(date);
     }
 
+
+    public workingTimeBetween( from: Date, to: Date  , unit: 'MINUTES'|'HOURS'|'DAYS'): Number {
+        if ( !(from instanceof Date || to instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+        if( from.getTime() > to.getTime()){
+            throw new TimerError('From date should be less than to date !');
+        }
+        
+        let count = 0 ;
+       
+        
+        if (unit.toUpperCase() === 'DAYS' ){
+            let bufferedDate = this.getDayInfo(from);
+            let nextDate = new Date(from.setHours(24,0,0,0));
+
+            while ( (   !(bufferedDate.isVacation || bufferedDate.isWeekend) &&
+                         !bufferedDate.isExceptional ) &&
+                    nextDate < to ) {
+                count++;
+                nextDate = new Date(from.setHours(24,0,0,0));
+                bufferedDate = this.getDayInfo(nextDate);
+            }
+            return count;
+        }
+
+        let nextWindow = this.getNextWorkingTime(from);
+
+        if( nextWindow.getTime() > to.getTime()){
+            return 0 ;
+        }
+
+        while ( nextWindow.getTime() <= to.getTime() ){
+            
+            const day = this.getFormatedDate(nextWindow);
+            const bufferedDate = this.getDayInfo(nextWindow);
+
+            bufferedDate.workingHours.forEach((window) => {
+                const startTime = new Date(`${day} ${window.from}`).getTime();
+                const endTime = new Date(`${day} ${window.to}`).getTime();
+                let nextWindowMs = nextWindow.getTime();
+                
+                if( nextWindowMs >= startTime && 
+                    nextWindowMs <= endTime && 
+                    nextWindowMs <  to.getTime()  
+                    ){
+                    if ( endTime < to.getTime() ) {
+                        count += ( endTime - nextWindowMs ) ;
+                    }else{
+                        count += ( to.getTime() - nextWindowMs ) ;
+                    }
+                    nextWindow = this.getNextWorkingTime(new Date(endTime));
+
+                }
+            });
+        }
+        
+        return (unit.toUpperCase() === 'MINUTES' )? 
+                        Number((count /  TimerUnit.MINUTES).toFixed(1)) : 
+                        Number((count / TimerUnit.HOURS).toFixed(1)) ;
+    }
+
+    public async workingTimeBetweenAsync(
+        from: Date, to: Date  , unit: 'MINUTES'|'HOURS'|'DAYS'
+    ): Promise<Number>{
+        return this.workingTimeBetween(from, to, unit);
+    }
+
+    
     public isWorkingTime( date: Date ): boolean{
         if ( !(date instanceof Date) ){
             throw new TimerError('Invalid Date !');
@@ -354,7 +409,7 @@ export class Timer  {
             throw new TimerError('Please set configuration !');
         } 
 
-
+        // Get next working time 
         let nextWindow = this.getNextWorkingTime(date);
         
         if (unit.toUpperCase() === 'DAYS' ){
@@ -375,14 +430,17 @@ export class Timer  {
             bufferedDate.workingHours.forEach((window) => {
                 const startTime = new Date(`${day} ${window.from}`).getTime();
                 const endTime = new Date(`${day} ${window.to}`).getTime();
+
+                // If it's the first shift
                 if( 
                     nextWindowMs == startTime 
                     ){
-                    
+                    // If shift will cover the remainig time so the required time is in this shift
                     if ( endTime - startTime > timerMs) {
                         nextWindow = new Date( startTime +  timerMs);
                         timerMs = 0 ;
                     
+                    // If shift will not cover the remainig time?
                     }else{
                         nextWindow = this.getNextWorkingTime(new Date(endTime));
                         timerMs =  timerMs - (endTime - startTime); 
