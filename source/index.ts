@@ -16,4 +16,5 @@ import { Timer } from "./lib/timer";
     }
 }
 
-export = TimerFactory;
+module.exports = TimerFactory;
+export default  TimerFactory;
