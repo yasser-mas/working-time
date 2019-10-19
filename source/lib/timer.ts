@@ -5,6 +5,7 @@ import { BusinessDay } from "./interfaces/i-business-day";
 import TimerError from "./timer-error";
 import WorkingTimeout from "./working-timeout";
 import { IWorkingHours } from "./interfaces/i-working-hours";
+import { TimerUtils } from "./timer-utils";
 
 
 export class Timer  {
@@ -43,22 +44,6 @@ export class Timer  {
         return this.setConfig(timerParams)
     }
 
-    private getMonth(date: Date){
-        const MONTH = date.getMonth() + 1  ;
-        return (MONTH < 10)? "0" + MONTH: MONTH ;
-    }
-
-    private getDay(date: Date){
-        return (date.getDate() < 10)? "0" + date.getDate(): date.getDate() ;;
-    }
-
-    private getFormatedDate(date: Date){
-        const YEAR = date.getFullYear();
-        const MONTH = this.getMonth(date) ;
-        const DAY = this.getDay(date);
-        return `${YEAR}-${MONTH}-${DAY}` ;
-    }
-
     private constructWorkingDays(timerParams: ITimerParams , extend: boolean){
         let today = new Date().setHours(0,0,0,0);
         let startDate = today - ( TimerUnit.DAYS * Math.abs(timerParams.minBufferedDays));
@@ -88,7 +73,7 @@ export class Timer  {
 
         for ( let i = startDate ; i <= endDate ; i += TimerUnit.DAYS ){
             let date = new Date(i);
-            const FULLDAY = this.getFormatedDate(date) ;
+            const FULLDAY = TimerUtils.getFormatedDate(date) ;
             const WILDCARDDAY = '*' + FULLDAY.substr(4) ;
             const BUSINESSDAY = new BusinessDay(false,false,false,[]);
 
@@ -139,10 +124,7 @@ export class Timer  {
         }); 
     }
 
-    private getDaysBetween(from: Date, to: Date ){
-
-        return Math.ceil( ( from.getTime() - to.getTime() ) / TimerUnit.DAYS );
-    }
+    
 
     public get getBufferedCalendar():Map <string,BusinessDay>  {
         return this.bufferedCalendar ;
@@ -157,10 +139,10 @@ export class Timer  {
             throw new TimerError('Please set configuration !');
         } 
 
-        let formatedDate = this.getFormatedDate(date);
+        let formatedDate = TimerUtils.getFormatedDate(date);
         let bufferedDate = <BusinessDay> this.getBufferedCalendar.get(formatedDate);
         if (!bufferedDate){
-            const daysBetween = this.getDaysBetween(date , new Date()) ; 
+            const daysBetween = TimerUtils.getDaysBetween(date , new Date()) ; 
 
             if (daysBetween > 0 ){
                 this.timerParams.maxBufferedDays = daysBetween + 5 ;
@@ -217,7 +199,7 @@ export class Timer  {
 
         while ( nextWindow.getTime() <= to.getTime() ){
             
-            const day = this.getFormatedDate(nextWindow);
+            const day = TimerUtils.getFormatedDate(nextWindow);
             const bufferedDate = this.getDayInfo(nextWindow);
 
             bufferedDate.workingHours.forEach((window) => {
@@ -267,7 +249,7 @@ export class Timer  {
         }
 
         const requestedTime = date.getTime();
-        const day = this.getFormatedDate(date);
+        const day = TimerUtils.getFormatedDate(date);
 
         let inWindow = false ;
         bufferedDate.workingHours.forEach((window) => {
@@ -313,7 +295,7 @@ export class Timer  {
         }   
 
         const requestedTime = date.getTime();
-        const day = this.getFormatedDate(date);
+        const day = TimerUtils.getFormatedDate(date);
 
         bufferedDate.workingHours.forEach((window , index)=>{
             const startTime = new Date(`${day} ${window.from}`).getTime();
@@ -423,7 +405,7 @@ export class Timer  {
         let timerMs = (unit.toUpperCase() === 'MINUTES' )? duration *  TimerUnit.MINUTES : duration * TimerUnit.HOURS ;
 
         while ( timerMs !== 0 ){
-            const day = this.getFormatedDate(nextWindow);
+            const day = TimerUtils.getFormatedDate(nextWindow);
             const bufferedDate = this.getDayInfo(nextWindow);
             let nextWindowMs = nextWindow.getTime();
 
