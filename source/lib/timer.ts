@@ -4,7 +4,6 @@ import { TimerUnit } from "./timer-unit";
 import { BusinessDay } from "./interfaces/i-business-day";
 import TimerError from "./timer-error";
 import WorkingTimeout from "./working-timeout";
-import { IWorkingHours } from "./interfaces/i-working-hours";
 import { TimerUtils } from "./timer-utils";
 
 
