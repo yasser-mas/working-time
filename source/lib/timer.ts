@@ -5,6 +5,8 @@ import { BusinessDay } from "./interfaces/i-business-day";
 import TimerError from "./timer-error";
 import WorkingTimeout from "./working-timeout";
 import { TimerUtils } from "./timer-utils";
+import { resolve } from "path";
+import { rejects } from "assert";
 
 
 export class Timer  {
@@ -446,6 +448,12 @@ export class Timer  {
     }
 
 
+    public async addAsync(
+        date: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS'  
+    ): Promise<Date>{
+        return this.add(date, duration, unit);
+    }
+
     public setWorkingTimeout(
         baseDate: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS', cb : Function, desc: string
     ): WorkingTimeout{
@@ -463,12 +471,22 @@ export class Timer  {
         return new WorkingTimeout(baseDate, fireDate, duration, unit, cb, desc);
     }
 
-
-    public async addAsync(
-        date: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS'  
-    ): Promise<Date>{
-        return this.add(date, duration, unit);
+    public setWorkingTimeoutAsync(
+        baseDate: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS', cb : Function, desc: string
+    ): Promise<WorkingTimeout>{
+        return new Promise( (resolve,reject)=>{
+            let workingTimeout: WorkingTimeout ; 
+            try {
+                workingTimeout = this.setWorkingTimeout(baseDate , duration , unit , cb, desc)
+                resolve(workingTimeout);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
+    
+
+
 
 
 }

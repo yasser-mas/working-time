@@ -3,7 +3,6 @@ export default class WorkingTimeout {
     private timeoutID: NodeJS.Timeout ; 
     private  _fired: boolean = false ; 
     private  _cancelled: boolean = false ; 
-
     constructor( 
         private _baseDate: Date,
         private _fireDate: Date,

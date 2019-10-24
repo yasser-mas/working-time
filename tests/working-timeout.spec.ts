@@ -63,4 +63,17 @@ describe('Set Working Timeout Test Cases', function() {
     timeout.clearTimeout();// To close test
   });
 
+
+  it('should set timeout soonest working day first window, on submit old date and will fire in the past', function() {
+    const timerInstance = timer.setConfig(timerConfig);
+    let day = new Date('2019-07-10');
+    day.setHours(12,0);
+    timerInstance.setWorkingTimeoutAsync(day , 1 , 'DAYS',cb , 'Timeout for confirm order').then( timeout =>{
+      expect(timeout.fireDate).to.be.eql(timer.getNextWorkingTime(new Date()));
+      expect(timeout.callback()).to.be.eql( 1 );
+      expect(timeout.fired).to.be.eql( false );
+      timeout.clearTimeout();// To close test    })
+    });
+  });
+
 });

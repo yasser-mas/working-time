@@ -506,6 +506,17 @@ Function will return WorkingTimeout Class.
         console.log(error.message);        
     }
 
+
+    // Or You can submit it Async 
+    let day = new Date('2019-08-20');
+    let cb = function(){
+        return 1 ;
+    }
+
+    timerInstance.setWorkingTimeoutAsync(day , 1 , 'DAYS',cb , 'Timeout for confirm order').then( timeout =>{
+        console.log(timeout);
+    });
+
 ```
 
 
