@@ -44,6 +44,11 @@ Working Times helps you to check if any day is working day or weekend or vacatio
 * [Get Working time between two times](#Get-Working-time-between-two-times)
 
 
+##### Release 1.1.10 + 
+
+* [Get previous working time](#Get-previous-working-time)
+
+
 
 ### Installation
 
@@ -616,6 +621,49 @@ You can calculate working time (Dates , Minutes , Hours ) between two times.
     });
 
 ```
+
+
+
+#### Get previous working time
+
+Get previous working time will return the latest working minute.  
+<br />
+If the requested date is a woriking time, it will return now() 
+<br />
+If it's not a working time it will return the latest minute in the pervious window
+
+> PS: This method prepared for subtracting working time calculations,  <br />
+>
+
+
+```ts
+
+    getPreviousWorkingTime( date: Date ): Date {}
+
+
+    try {
+
+        const timerInstance = timer.setConfig(timerConfig);
+        let day = new Date('2019-07-25');
+        day.setHours(12,0);
+        let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);        console.log(t);
+
+    } catch (error) {
+        console.log(error.message);        
+    }
+
+    // Or 
+
+    timer.getPreviousWorkingTimeAsync(day).then(d=>{
+    }).catch(e =>{
+    });
+
+    // Or 
+    let t = await timerInstance.getPreviousWorkingTimeAsync(day).catch(e =>{
+    });
+
+```
+
 
 
 ### To do

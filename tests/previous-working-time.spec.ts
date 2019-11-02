@@ -25,8 +25,8 @@ describe('Get Previous Working Time Test Cases', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-07-25');
     day.setHours(12,0);
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eql(day);
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eql(day);
 
   });
 
@@ -35,8 +35,8 @@ describe('Get Previous Working Time Test Cases', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-10-14');
     day.setHours(6,0)
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-10-13 20:00'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-10-13 20:00'));
 
   });
 
@@ -44,16 +44,16 @@ describe('Get Previous Working Time Test Cases', function() {
   it('should be previous shift end time , on submit between shifts', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-10-14 15:00:00');
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-10-14 14:00'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-10-14 14:00'));
 
   });
 
   it('should be last week day last shift end time , on submit weekend date time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-10-19 11:00');
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-10-17 20:00'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-10-17 20:00'));
 
   });
 
@@ -61,8 +61,8 @@ describe('Get Previous Working Time Test Cases', function() {
   it('should be last week day last shift end time , on submit first week day before first shift', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-10-20 06:00');
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-10-17 20:00'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-10-17 20:00'));
 
   });
 
@@ -70,8 +70,8 @@ describe('Get Previous Working Time Test Cases', function() {
   it('should be before 3 days, on submit time before first after weekend and vacation day', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-07-29 06:00');
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-07-25 20:00'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-07-25 20:00'));
 
   });
 
@@ -88,8 +88,8 @@ describe('Get Previous Working Time Test Cases', function() {
   it('should be same time on submit exceptiona working time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-06-16 15:30');
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-06-16 15:30'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-06-16 15:30'));
 
   });
 
@@ -97,8 +97,8 @@ describe('Get Previous Working Time Test Cases', function() {
   it('should be same time on submit before exceptiona working day', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-08-14 06:30');
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-08-13 12:00'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-08-13 12:00'));
 
   });
 
@@ -106,8 +106,8 @@ describe('Get Previous Working Time Test Cases', function() {
   it('should be previous working day last shift , on submit vacation time', function() {
     const timerInstance = timer.setConfig(timerConfig);
     let day = new Date('2019-08-05 12:00');
-    let nextWorkingTime = timerInstance.getPreviousWorkingTime(day);
-    expect(nextWorkingTime).to.be.eqls(new Date('2019-08-04 20:00'));
+    let previousWorkingTime = timerInstance.getPreviousWorkingTime(day);
+    expect(previousWorkingTime).to.be.eqls(new Date('2019-08-04 20:00'));
 
   });
 
