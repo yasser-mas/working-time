@@ -288,8 +288,8 @@ export class Timer  {
         let nextWindow: null | Date = null ; 
 
         if ( bufferedDate.isVacation || ( bufferedDate.isWeekend && !bufferedDate.isExceptional )  ) {
-            let nextDaty = new Date( date.getTime() + TimerUnit.DAYS ).setHours(0,0,0,0);
-            return this.getNextWorkingTime(new Date(nextDaty));
+            let nextDay = new Date( date.getTime() + TimerUnit.DAYS ).setHours(0,0,0,0);
+            return this.getNextWorkingTime(new Date(nextDay));
         }
         if (this.isWorkingTime(date)) {
             return date;
@@ -319,8 +319,8 @@ export class Timer  {
         });
 
         if ( !nextWindow ){
-            let nextDaty = new Date( date.getTime() + TimerUnit.DAYS ).setHours(0,0,0,0);
-            return this.getNextWorkingTime(new Date(nextDaty));
+            let nextDay = new Date( date.getTime() + TimerUnit.DAYS ).setHours(0,0,0,0);
+            return this.getNextWorkingTime(new Date(nextDay));
         }
 
         return nextWindow;
@@ -332,6 +332,62 @@ export class Timer  {
         date: Date 
     ): Promise<Date>{
         return this.getNextWorkingTime(date);
+    }
+
+
+
+    public getPreviousWorkingTime( date: Date ): Date{
+        if ( !(date instanceof Date) ){
+            throw new TimerError('Invalid Date !');
+        } 
+        if ( this.bufferedCalendar.size === 0 ){
+            throw new TimerError('Please set configuration !');
+        } 
+        
+        const bufferedDate = this.getDayInfo(date);
+        let previousWindow: null | Date = null ; 
+
+        if ( bufferedDate.isVacation || ( bufferedDate.isWeekend && !bufferedDate.isExceptional )  ) {
+            let previousDay = new Date( date.setDate(date.getDate()-1) ).setHours(23,59,59,0);
+            return this.getPreviousWorkingTime(new Date(previousDay));
+        }
+        if (this.isWorkingTime(date)) {
+            return date;
+        }   
+
+        const requestedTime = date.getTime();
+        const day = TimerUtils.getFormatedDate(date);
+
+        for ( let i = bufferedDate.workingHours.length -1  ; i >= 0 ; i-- ){
+            const window = bufferedDate.workingHours[i];
+            const startTime = new Date(`${day} ${window.from}`).getTime();
+            const endTime = new Date(`${day} ${window.to}`).getTime();
+            
+            if(requestedTime >= startTime && 
+                requestedTime < endTime ){
+                    previousWindow =  date ;
+                break;
+            }else if( endTime < requestedTime ){
+                previousWindow =  new Date(endTime) ; 
+                break;
+            }
+        }
+
+
+        if ( !previousWindow ){
+            let previousDay = new Date( date.setDate(date.getDate()-1) ).setHours(23,59,59,0);
+            return this.getPreviousWorkingTime(new Date(previousDay));
+        }
+
+        return previousWindow;
+    
+    }
+
+
+    public async getPreviousWorkingTimeAsync(
+        date: Date 
+    ): Promise<Date>{
+        return this.getPreviousWorkingTime(date);
     }
 
 
