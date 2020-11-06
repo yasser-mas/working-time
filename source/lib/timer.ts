@@ -24,7 +24,6 @@ export class Timer  {
         timerParams: ITimerParams
     ) : Timer {  
         this.timerParams = timerParams ;
-        
         try {
             this.timerValidator.validateVacations( timerParams.vacations );
             this.timerValidator.validateNormalWorkingDays( timerParams.normalWorkingHours );
@@ -42,7 +41,19 @@ export class Timer  {
     public async setConfigAsync(
         timerParams: ITimerParams
     ): Promise<Timer>{
-        return this.setConfig(timerParams)
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.setConfig(timerParams);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
     private constructWorkingDays(timerParams: ITimerParams , extend: boolean){
@@ -160,7 +171,19 @@ export class Timer  {
     public async getDayInfoAsync(
         date: Date 
     ): Promise<BusinessDay>{
-        return this.getDayInfo(date);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.getDayInfo(date);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
 
@@ -231,7 +254,19 @@ export class Timer  {
     public async workingTimeBetweenAsync(
         from: Date, to: Date  , unit: 'MINUTES'|'HOURS'|'DAYS'
     ): Promise<Number>{
-        return this.workingTimeBetween(from, to, unit);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.workingTimeBetween(from, to, unit);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
     
@@ -272,7 +307,19 @@ export class Timer  {
     public async isWorkingTimeAsync(
         date: Date 
     ): Promise<boolean>{
-        return this.isWorkingTime(date);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.isWorkingTime(date);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
     public getNextWorkingTime( date: Date ): Date{
@@ -331,7 +378,19 @@ export class Timer  {
     public async getNextWorkingTimeAsync(
         date: Date 
     ): Promise<Date>{
-        return this.getNextWorkingTime(date);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.getNextWorkingTime(date);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
 
@@ -387,7 +446,19 @@ export class Timer  {
     public async getPreviousWorkingTimeAsync(
         date: Date 
     ): Promise<Date>{
-        return this.getPreviousWorkingTime(date);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.getPreviousWorkingTime(date);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
 
@@ -408,7 +479,19 @@ export class Timer  {
     public async getNextWorkingDayAsync(
         date: Date 
     ): Promise<Date>{
-        return this.getNextWorkingDay(date);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.getNextWorkingDay(date);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
 
@@ -436,7 +519,19 @@ export class Timer  {
     public async getPreviousWorkingDayAsync(
         date: Date 
     ): Promise<Date>{
-        return this.getPreviousWorkingDay(date);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.getPreviousWorkingDay(date);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
 
@@ -507,7 +602,19 @@ export class Timer  {
     public async addAsync(
         date: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS'  
     ): Promise<Date>{
-        return this.add(date, duration, unit);
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.add(date, duration, unit);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
     }
 
     public setWorkingTimeout(
@@ -530,15 +637,20 @@ export class Timer  {
     public setWorkingTimeoutAsync(
         baseDate: Date , duration: number , unit: 'MINUTES'|'HOURS'|'DAYS', cb : Function, desc: string
     ): Promise<WorkingTimeout>{
-        return new Promise( (resolve,reject)=>{
-            let workingTimeout: WorkingTimeout ; 
-            try {
-                workingTimeout = this.setWorkingTimeout(baseDate , duration , unit , cb, desc)
-                resolve(workingTimeout);
-            } catch (error) {
-                reject(error);
-            }
-        });
+        return  new Promise((resolve, reject)=>{
+            setTimeout(() => {
+                let data ;
+                try {
+                    data = this.setWorkingTimeout(baseDate , duration , unit , cb, desc);
+                    resolve(data);
+                    
+                } catch (error) {
+                    reject(error);
+                }
+            
+            }, 0);
+           });
+
     }
     
 
