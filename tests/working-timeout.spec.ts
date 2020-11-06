@@ -27,13 +27,25 @@ describe('Set Working Timeout Test Cases', function() {
 
   it('should set timeout after one minute from given date ', function() {
     const timerInstance = timer.setConfig(timerConfig);
-    let day = new Date('2020-08-20');
+    let day = new Date();
+
+    // add one day for current time
+    day = new Date(day.getTime() + ( 24 * 3600000 ))
+
+    // Is not friday or saturday ( weekend )
+    while(day.getDay() >= 5 ){
+      day = new Date(day.getTime() + ( 24 * 3600000 ))
+    }
+
     day.setHours(10,0);
+
     let cb2 = function(){
       return 2 ;
     }
     let timeout = timerInstance.setWorkingTimeout(day, 1 , 'MINUTES',cb , 'Timeout for confirm order');
-    expect(timeout.fireDate).to.be.eql(new Date('2020-08-20 10:01'));
+
+    
+    expect(timeout.fireDate).to.be.eql(new Date(day.getTime() + (60 * 1000) ));
     expect(timeout.baseDate).to.be.eql(day);
     expect(timeout.description).to.be.eql('Timeout for confirm order');
     expect(timeout.fired).to.be.eql(false);
